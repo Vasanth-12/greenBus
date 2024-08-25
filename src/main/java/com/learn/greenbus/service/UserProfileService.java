@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.learn.greenbus.model.UserProfile;
 import com.learn.greenbus.repository.UserRepo;
+import com.learn.greenbus.dto.UserDTO;
 
 import lombok.Data;
 
@@ -15,7 +16,7 @@ public class UserProfileService {
     @Autowired
     UserRepo userRepo;
 
-    public UserProfile verifyLogin(UserProfile userData) {
+    public UserDTO verifyLogin(UserProfile userData) {
 
         String emailid = userData.emailid;
         String password = userData.password;
@@ -23,22 +24,23 @@ public class UserProfileService {
         System.out.println("Inside verifyLogin: "+ emailid+ " - "+ password);
         UserProfile userLogin = userRepo.findByEmailid(emailid);
         if (userLogin.password.equals(password)) {
-            return userLogin;
+            return new UserDTO(userLogin.id, userLogin.username, userLogin.emailid);
+
         }
         return null;
     }
 
-    public UserProfile persistUser(UserProfile userData) {
-        System.out.println("Inside persistUser: ");
-        userRepo.save(userData);
-        return userData;
+    public UserDTO persistUser(UserProfile userData) {
+        userData = userRepo.save(userData);
+        return new UserDTO(userData.id, userData.username, userData.emailid);
     }
 
     public UserProfile updateUserProfile(String id, UserProfile userData) {
         return userRepo.updateUserProfile(id, userData);
     }
 
-    public UserProfile getUserProfile(String id) {
-        return userRepo.findById(id).orElseThrow();
+    public UserDTO getUserProfile(String id) {
+        UserProfile userData = userRepo.findById(id).orElseThrow();
+        return new UserDTO(userData.id, userData.username, userData.emailid);
     }
 }
