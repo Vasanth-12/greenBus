@@ -7,11 +7,9 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class UserDTO {
+public class TravelAgencyDTO {
     public String id;
-    public String username;
+    public String agencyname;
     public String emailid;
-    public String mobilenumber;
     public String password;
 }
-

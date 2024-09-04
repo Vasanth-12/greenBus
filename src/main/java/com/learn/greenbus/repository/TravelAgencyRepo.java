@@ -8,6 +8,6 @@ import com.learn.greenbus.model.TravelAgency;
 @Repository
 public interface TravelAgencyRepo extends MongoRepository<TravelAgency, String>{
 
-    public TravelAgency findByAgencyEmailID(String emailId);
+    public TravelAgency findByEmailid(String emailId);
 
 }
