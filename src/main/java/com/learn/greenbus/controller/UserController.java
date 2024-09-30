@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.learn.greenbus.dto.UserDTO;
 import com.learn.greenbus.service.UserProfileService;
 
+import jakarta.validation.Valid;
+
 
 @RestController
 public class UserController {
@@ -43,7 +45,7 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity signinEndpoint(@RequestBody UserDTO user) {
+    public ResponseEntity signinEndpoint(@Valid @RequestBody UserDTO user) {
         try {
             UserDTO userDTO = userProfile.persistUser(user);
             return new ResponseEntity<>(userDTO, HttpStatus.OK);

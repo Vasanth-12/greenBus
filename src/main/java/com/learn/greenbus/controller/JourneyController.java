@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.learn.greenbus.dto.JourneyDTO;
-import com.learn.greenbus.model.BookingDetails;
+import com.learn.greenbus.model.Booking;
 import com.learn.greenbus.model.Journey;
 import com.learn.greenbus.service.JourneyService;
+
+import jakarta.validation.Valid;
 
 
 @RestController
@@ -66,8 +68,9 @@ System.out.println(e);
         }
     }
     
+    /*
     @PutMapping("/journey/{journeyid}/booking")
-    public ResponseEntity booking(@PathVariable String journeyid, @RequestBody BookingDetails bookingDetails) {
+    public ResponseEntity booking(@PathVariable String journeyid, @Valid @RequestBody List<BookingDetails> bookingDetails) {
         
         try {
             if (journeyService.booking(journeyid, bookingDetails)) {
@@ -76,13 +79,11 @@ System.out.println(e);
             else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            
         }
         catch (Exception e) {
 
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
-
+     */
 }

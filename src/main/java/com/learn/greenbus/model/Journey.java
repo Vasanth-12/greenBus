@@ -1,6 +1,5 @@
 package com.learn.greenbus.model;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +24,5 @@ public class Journey {
     public int availableSeats;
     public int ticketFee;
     public BusDetails busdetails;
-    public HashMap<String, BookingDetails> seatDetails = new HashMap<String, BookingDetails>();
-
-
+    public HashMap<String, SeatInfo> seatDetails = new HashMap<>();
 }
