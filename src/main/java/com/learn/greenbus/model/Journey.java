@@ -1,6 +1,6 @@
 package com.learn.greenbus.model;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,13 +17,12 @@ public class Journey {
     public String id;
     public String startingPoint;
     public String destination;
-    public Timestamp startingTimeStamp;
-    public Timestamp endingTimestamp;
+    public Date startingTimeStamp;
+    public Date endingTimestamp;
     public List<String> boardingPoints;
-    public List<Timestamp> boardingPointTimestamps;
+    public List<Date> boardingPointTimestamps;
     public int availableSeats;
+    public int ticketFee;
     public BusDetails busdetails;
-    public HashMap<String, BookingDetails> seatDetails = new HashMap<String, BookingDetails>();
-
-
+    public HashMap<String, SeatInfo> seatDetails = new HashMap<>();
 }
