@@ -1,24 +1,19 @@
 package com.learn.greenbus.controller;
 
-import org.springframework.web.bind.annotation.RestController;
-
-import com.learn.greenbus.model.UserProfile;
-import com.learn.greenbus.service.UserProfileService;
-
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.learn.greenbus.dto.UserDTO;
+import com.learn.greenbus.service.UserProfileService;
+
+import jakarta.validation.Valid;
 
 
 @RestController
@@ -27,17 +22,18 @@ public class UserController {
     @Autowired
     UserProfileService userProfile;
 
-    @GetMapping("ping")
+    @GetMapping("/ping")
     public ResponseEntity healthCheck() {
         return new ResponseEntity<>("pong", HttpStatus.OK);
     }
 
-    @PostMapping("login")
-    public ResponseEntity loginEndpoint(@RequestBody UserProfile userData) {
+    @PostMapping("/login")
+    public ResponseEntity loginEndpoint(@RequestBody UserDTO userData) {
         try {
-            UserProfile user = userProfile.verifyLogin(userData);
-            if (user != null) {
-                return new ResponseEntity<>(user, HttpStatus.OK);
+
+            UserDTO userDTO = userProfile.verifyLogin(userData);
+            if (userDTO != null) {
+                return new ResponseEntity<>(userDTO, HttpStatus.OK);
             }
             else {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -48,35 +44,44 @@ public class UserController {
         }
     }
 
-    @PostMapping("signup")
-    public ResponseEntity signinEndpoint(@RequestBody UserProfile user) {
+    @PostMapping("/signup")
+    public ResponseEntity signinEndpoint(@Valid @RequestBody UserDTO user) {
         try {
-            userProfile.persistUser(user);
-            return new ResponseEntity<>(user, HttpStatus.OK);
+            UserDTO userDTO = userProfile.persistUser(user);
+            return new ResponseEntity<>(userDTO, HttpStatus.OK);
         }
         catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    /* *********** WIP ************** */
-    // @PutMapping("user/{id}")
-    // public ResponseEntity updateUserProfile(@PathVariable String id, @RequestBody UserProfile user) {
-        
-    //     try {
-    //         UserProfile z = userProfile.updateUserProfile(id, user);
-    //         return new ResponseEntity<>(z, HttpStatus.OK);
-    //     }
-    //     catch (Exception e) {
-    //         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    //     }
-    // }
+    @PutMapping("/user/{id}")
+    public ResponseEntity updateUserProfile(@PathVariable String id, @RequestBody UserDTO user) {
+        try {
+            UserDTO z = userProfile.updateUserProfile(id, user);
+            return new ResponseEntity<>(z, HttpStatus.OK);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-    @GetMapping("/{id}")
+    @PutMapping("/user/{id}/changepassword")
+    public ResponseEntity updateUserPassword(@PathVariable String id, @RequestBody UserDTO userData) {  
+        try {
+            UserDTO z = userProfile.updateUserPassword(id, userData);
+            return new ResponseEntity<>(z, HttpStatus.OK);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("user/{id}")
     public ResponseEntity getUserProfile(@PathVariable String id) {
         try {
-            UserProfile user = userProfile.getUserProfile(id);
-            return new ResponseEntity<>(user, HttpStatus.OK);
+            UserDTO userDTO = userProfile.getUserProfile(id);
+            return new ResponseEntity<>(userDTO, HttpStatus.OK);
         }
         catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

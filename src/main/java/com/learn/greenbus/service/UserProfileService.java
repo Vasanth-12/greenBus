@@ -3,6 +3,7 @@ package com.learn.greenbus.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.learn.greenbus.dto.UserDTO;
 import com.learn.greenbus.model.UserProfile;
 import com.learn.greenbus.repository.UserRepo;
 
@@ -15,7 +16,7 @@ public class UserProfileService {
     @Autowired
     UserRepo userRepo;
 
-    public UserProfile verifyLogin(UserProfile userData) {
+    public UserDTO verifyLogin(UserDTO userData) {
 
         String emailid = userData.emailid;
         String password = userData.password;
@@ -23,22 +24,63 @@ public class UserProfileService {
         System.out.println("Inside verifyLogin: "+ emailid+ " - "+ password);
         UserProfile userLogin = userRepo.findByEmailid(emailid);
         if (userLogin.password.equals(password)) {
-            return userLogin;
+            return UserDTO.builder()
+                        .id(userLogin.id)
+                        .username(userLogin.username)
+                        .emailid(userLogin.emailid)
+                        .mobilenumber(userLogin.mobilenumber)
+                        .build();
         }
         return null;
     }
 
-    public UserProfile persistUser(UserProfile userData) {
-        System.out.println("Inside persistUser: ");
-        userRepo.save(userData);
+    public UserDTO persistUser(UserDTO userDataIn) {
+        UserProfile userData = userRepo.save(UserProfile.builder()
+                                    .username(userDataIn.username)
+                                    .emailid(userDataIn.emailid)
+                                    .mobilenumber(userDataIn.mobilenumber)
+                                    .password(userDataIn.password)
+                                    .build());
+        return UserDTO.builder()
+                    .id(userData.id)
+                    .username(userData.username)
+                    .emailid(userData.emailid)
+                    .mobilenumber(userData.mobilenumber)
+                    .build();
+    }
+
+    public UserDTO updateUserProfile(String id, UserDTO userData) {
+    
+        UserProfile user = userRepo.findById(userData.id).orElseThrow();
+        user.setEmailid(userData.emailid);
+        user.setMobilenumber(userData.mobilenumber);
+        user.setUsername(userData.username);
+        
+        userRepo.save(user);
         return userData;
     }
 
-    public UserProfile updateUserProfile(String id, UserProfile userData) {
-        return userRepo.updateUserProfile(id, userData);
+    public UserDTO updateUserPassword(String id, UserDTO userData) {
+        UserProfile user = userRepo.findById(id).orElseThrow();
+        user.setPassword(userData.password);
+
+        userRepo.save(user);
+        return UserDTO.builder()
+                .id(user.id)
+                .username(user.username)
+                .emailid(user.emailid)
+                .mobilenumber(user.mobilenumber)
+                .build();
+
     }
 
-    public UserProfile getUserProfile(String id) {
-        return userRepo.findById(id).orElseThrow();
+    public UserDTO getUserProfile(String id) {
+        UserProfile userData = userRepo.findById(id).orElseThrow();
+        return UserDTO.builder()
+                        .id(userData.id)
+                        .username(userData.username)
+                        .emailid(userData.emailid)
+                        .mobilenumber(userData.mobilenumber)
+                        .build();
     }
 }

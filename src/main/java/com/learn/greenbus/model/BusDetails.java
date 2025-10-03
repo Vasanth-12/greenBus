@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
 import lombok.Data;
 
 @Data
@@ -18,7 +19,7 @@ public class BusDetails {
     public int seatCount;
     public String type;
     public boolean ac;
-    public List<String> seatNumber = new ArrayList<String>();
+    public List<String> seatNumber = new ArrayList<>();
 
     // WIP
     /*

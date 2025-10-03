@@ -3,9 +3,9 @@ package com.learn.greenbus.repository;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import com.learn.greenbus.model.UserProfile;
+import com.learn.greenbus.model.Booking;
 
 @Repository
-public interface UserRepo extends MongoRepository<UserProfile, String> {
-    public UserProfile findByEmailid(String emailid);
+public interface BookingRepo extends  MongoRepository<Booking, String> {
+
 }
